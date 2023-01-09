@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"> 
+
+        <link rel="stylesheet" href="/style.css">
+        <title>Image Board</title>
+    </head>
+    <body>
+        
+        <div id="header">
+            <h2 class="title">imageboard</h2>
+        </div>
+
+        <!-- - - - - vue app gets applied here - - - - - - - - - - -->
+        <div id="main">  
+
+            <!----------------------- F O R M ----------------------->
+            <div id="upload">
+                <form  
+                    action="/image"
+                    method="post"
+                    enctype="multipart/form-data"
+                >
+                    <div class="form-row">
+
+                        <input type="text" v-model="title" name="title" placeholder="title">
+                        <input type="text" v-model="description" name="description" placeholder="description">
+                        <input type="text" v-model="username" name="username" placeholder="username">
+                        
+                        <label for="photo" id="filelabel">choose file</label>
+                        <input type="file" name="photo" id="photo" accept="image/png, image/jpeg"/>
+
+                        <!-- event listener on submit button that triggers upload function from app.js -->
+                        <input type="button" @click="uploadImage" value="✅" class="btn-submit" />
+
+                    </div>
+                </form>
+            </div>
+
+            <!----------------------- C A R D S ----------------------->
+            <div id="container">
+
+                <!-- loops through images array in data, thats why showModal can access id-->
+                <div class="card" v-for="image of images">
+
+                    <div class="pic">
+                        <img :src="image.url" @click="showModal(image.id)"/> 
+                    </div>
+
+                    <div class="bottom" >
+                        <h4 class="cardTitle">{{image.title}}</h4>
+                    </div>
+
+                </div>
+
+                <!-- showMore -->
+                <div v-if="moreItems" @click="showMore" id="show-more">showMore</div>
+
+            </div>
+
+            <!----------------------- M O D A L ----------------------->
+            <!-- get values from data via bind -->
+            <!-- use v-bind to pass props to child components -->
+            <!-- bind selectedId from data, that becomes current id(image.id) -->
+            <modal v-if="modal" :id="selectedId" @close="closeModal"></modal>
+
+        </div>
+
+        <script src="/js/app.js" type="module" crossorigin="use-credentials"></script>
+
+    </body>
+</html>
+
+
+<!-- @submit.prevent="onFormSubmit" -->
